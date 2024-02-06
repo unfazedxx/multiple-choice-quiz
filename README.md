@@ -67,9 +67,9 @@ THEN I can save my initials and my score
 - CSS
 ## Screenshots
 
-![Screenshot 1](./assets/image-1.png) 
+![Screenshot 1](./Assets/image-1.png) 
 
-![Screenshot 2](./assets/image.png)
+![Screenshot 2](./Assets/image.png)
 ## License
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
