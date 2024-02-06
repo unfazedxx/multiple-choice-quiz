@@ -4,140 +4,165 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Multiple Choice Quiz</title>
-     <link rel="stylesheet" href="index.css"><!-- linked CSS sheet -->
+    <link rel="stylesheet" href="index.css"> 
+    <!-- link the css styling  -->
 </head>
+<body>
 
-<!-- Timer box, IDs and Start game button -->
+<!-- timer box, IDs and Start game button -->
 
-<div class= "wrapper">
+<div class="wrapper">
     <div class="container">
         <div class="card-content">
-            <div> Time Remaining:</div>
-            <div id='countdown'>30</div>
-            <div>seconds</div>
+            <div>Time Remaining: <span id="countdown">30</span> seconds</div>
             <button id="startGamebtn">Start</button>          
         </div>
     </div>
 </div>
-<body id="quizQuestions">
 
-    <!-- seperate javascript file was not linking correctly, had to add in script on html page in order to get functionality  -->
+<main id="quizQuestions" style="display: none;">
+    <div id="question"></div>
+    <label for="answerInput">Your Answer:</label>
+    <input type="text" id="answerInput">
+    <button id="submitAnswer">Submit</button>
+</main>
 
-    <!-- using event listener on the start button to start the timer  -->
-    <script>
-        document.getElementById("startGamebtn").addEventListener('mouseover',  function(){
-            const countdownEl = document.getElementById('countdown');
-            let count = 30;        
-            const timer = setInterval(function() {
-                count--;
-        
-                console.log(count);
-                countdownEl.innerText = count; 
-        
-                if (count === 0) {
-                    clearInterval(timer);
-                    console.log("Time's up!");
-                    countdownEl.innerText = "Time's up!";
-                }
-            }, 1000);
-        });
-// using event listener on the same button to start the question prompts//
-</script>
+<main id="highScore" style="display: none;">
+    <h2>Highscores!</h2>
+    <p>Initials: <input type="text" id="saved-name"></p>
+    <p>Score: <span id="saved-score"></span></p>
+    <button id="save">Save</button>
+    <button id="restart">Restart Quiz</button>
+    <div id="previousScores"></div>
+</main>
+
+<!-- question prompts  -->
 <script>
-       document.getElementById("startGamebtn").addEventListener('click', function(){
-        var questions = [
-  {
-    prompt:'What is something which can manipulate the DOM?\n(A) JQuery\n\(B) CSS\n\(C) HTML\n\(D) All of the above',
-    answer: 'A'
-  },
-  {
-    prompt:'How do we call a function in Javascript?\n(A) SetInterval\n\(B) For\n\(C) console.log\n\(D) All of the above',
-    answer: 'C'
-  },
-  {
-    prompt:'Which is a third party API\n(A) Python\n\(B) Google Slides\n\(C) Google Fonts\n\(D) None',
-    answer: 'C'
-  },
-  {
-    prompt:'Where should we place our javascript <script> when creating an HTML document?\n(A) Top of <main> \n\(B) Middle of the <body>\n\(C) javascript is automatically linked\n\(D) At the bottom of <body>',
-    answer: 'D'
-  },
-  {
-    prompt:'When we see For in javascript, why is this used?\n(A) to create a loop\n\(B) to specify an event\n\(C) to set a variable\n\(D) to prompt the user',
-    answer: 'A'
-  },
+    const questions = [
+        {
+            prompt: '1. What is something which can manipulate the DOM?\n(A) JQuery\n\(B) CSS\n\(C) HTML\n\(D) All of the above',
+            answer: 'A'
+        },
+        {
+            prompt: '2. How do we call a function in Javascript?\n(A) SetInterval\n\(B) For\n\(C) console.log\n\(D) All of the above',
+            answer: 'C'
+        },
+        {
+            prompt: '3. Which is a third party API\n(A) Python\n\(B) Google Slides\n\(C) Google Fonts\n\(D) None',
+            answer: 'C'
+        },
+        {
+            prompt: '4. Where should we place our javascript <script> when creating an HTML document?\n(A) Top of <main> \n\(B) Middle of the <body>\n\(C) javascript is automatically linked\n\(D) At the bottom of <body>',
+            answer: 'D'
+        },
+        {
+            prompt: '5. When we see For in javascript, why is this used?\n(A) to create a loop\n\(B) to specify an event\n\(C) to set a variable\n\(D) to prompt the user',
+            answer: 'A'
+        }
+    ];
 
-];
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let timer;
 
+    function startTimer() {
+        let count = parseInt(document.getElementById('countdown').innerText);
+        timer = setInterval(function() {
+            count--;
+            document.getElementById('countdown').innerText = count;
+            if (count === 0) {
+                clearInterval(timer);
+                endGame();
+            }
+        }, 1000);
+    }
 
-//set a FOR loop to run through the prompts incrememntally so the user can answer each question
+    function displayQuestion() {
+        const questionElement = document.getElementById('question');
+        questionElement.textContent = questions[currentQuestionIndex].prompt;
+    }
 
-let score = 0;
+    function checkAnswer() {
+        const userAnswer = document.getElementById('answerInput').value.toUpperCase();
+        if (userAnswer === questions[currentQuestionIndex].answer) {
+            score++;
+            alert("Nice!");
+        } else {
+            alert('WRONG');
+            // subtract time for wrong answer
+            let currentCountdown = parseInt(document.getElementById('countdown').innerText);
+            document.getElementById('countdown').innerText = Math.max(currentCountdown - 5, 0); 
+            // subtract 5 seconds for wrong answer
+        }
+        currentQuestionIndex++;
+        if (currentQuestionIndex === questions.length) {
+            endGame();
+        } else {
+            displayQuestion();
+            clearInterval(timer); 
+            startTimer(); 
+        }
+        document.getElementById('answerInput').value = ''; 
+    }
 
-for(var i=0; i < questions.length; i++){
-  let response = window.prompt(questions[i].prompt);
+    function endGame() {
+        document.getElementById('quizQuestions').style.display = 'none';
+        document.getElementById('highScore').style.display = 'block';
+        document.getElementById('saved-score').textContent = score + '/' + questions.length;
+    }
 
-  if(response==questions[i].answer){
-    score++;
-  alert("Nice!");
-  }
-  else{alert('WRONG')};
-}
-alert('You got '+ score + '/' + questions.length + ". If you are happy with your score, please add it to the highscores. If not, try again!")
-});
+    function restartQuiz() {
+        clearInterval(timer); // stop the timer
+        currentQuestionIndex = 0; // reset question index
+        score = 0; // reset score
+        document.getElementById('saved-name').value = ''; 
+        document.getElementById('quizQuestions').style.display = 'none'; 
+        document.getElementById('highScore').style.display = 'none'; 
+        document.getElementById('startGamebtn').style.display = 'block'; 
+        document.getElementById('countdown').innerText = 30; // reset countdown timer
+    }
+
+    function saveHighScore() {
+        const initials = document.getElementById('saved-name').value;
+        const highScores = JSON.parse(localStorage.getItem('highScores')) || [];
+        highScores.push({ initials, score });
+        localStorage.setItem('highScores', JSON.stringify(highScores));
+    }
+
+    function displayHighScores() {
+        const highScores = JSON.parse(localStorage.getItem('highScores')) || [];
+        const previousScoresDiv = document.getElementById('previousScores');
+        previousScoresDiv.innerHTML = '<h3>Previous High Scores:</h3>';
+        highScores.forEach((item, index) => {
+            previousScoresDiv.innerHTML += `<p>${index + 1}. ${item.initials}: ${item.score}</p>`;
+        });
+    }
+
+    document.getElementById('startGamebtn').addEventListener('click', function() {
+        startTimer();
+        displayQuestion();
+        document.getElementById('quizQuestions').style.display = 'block';
+        this.style.display = 'none'; // hide start button after clicking
+    });
+
+    document.getElementById('submitAnswer').addEventListener('click', function() {
+        checkAnswer();
+    });
+
+    document.getElementById('save').addEventListener('click', function() {
+        saveHighScore();
+        displayHighScores();
+    });
+
+    document.getElementById('restart').addEventListener('click', function() {
+        restartQuiz();
+    });
+
+    // display previous high scores when the page loads
+    window.addEventListener('load', function() {
+        displayHighScores();
+    });
 </script>
 
-
-<!-- linked javascript sheet index.js -->
-    <script type="javascript/text" src="index.js"></script>
-
-<!-- a container to save the highscores -->
-
-    <main class="highScore">
-        <h2>Highscores!</h2>
-        <p>Initials: <textarea id="saved-name"></textarea></p>
-        
-        <p>Score: <textarea id="saved-score"></textarea></p>
-        
-        <button id="save">Save</button>
-        
-    </main>
-
-    <script>
-        var name = document.getElementById("saved-name");
-        var score = document.getElementById("saved-score");
-        var saveButton = document.getElementById("save");
-        
-        function saveLastScore() {
-          // Save related form data as an object
-          var lastScore = {
-            name: name.value,
-            score: score.value,
-          };
-          // Use .setItem() to store object in storage and JSON.stringify to convert it as a string
-          localStorage.setItem('lastScore', JSON.stringify(lastScore));
-        }
-        
-        function renderLastScore() {
-          // Use JSON.parse() to convert text to JavaScript object
-          var lastScore = JSON.parse(localStorage.getItem('lastScore')); 
-          if (lastScore !== null) {
-            document.getElementById('saved-name').innerHTML = lastScore.name;
-            document.getElementById('saved-score').innerHTML = lastScore.score;
-          }
-        }
-        
-        saveButton.addEventListener('click', function (event) {
-          event.preventDefault();
-          saveLastScore();
-          renderLastScore();
-        });
-        
-        function init() {
-          // When the init function is executed, the code inside renderLastScore function will also execute
-          renderLastScore();
-        }
-        init();
-        </script>
 </body>
 </html>

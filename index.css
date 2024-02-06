@@ -1,70 +1,33 @@
-body{
-    background: #734F96;
+body {
+  background: #aa72e1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
 }
 
-header {
-    color: black;
-    font-size: 20px;
-    font-weight:  500;
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid #eceff1;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  background-color: #734F96;
+  padding: 20px;
+  margin: 20px; /* Add margin to create space between timer and prompt container */
+  color: white; /* Set text color to white */
+
 }
 
-.wrapper{
-    padding: 15px
+
+.card-content {
+  color: white;
+  text-align: center;
 }
 
-.startGame{
-    padding: 10px;
-    margin: 24px;
-    cursor: pointer;
-    font-size: 24px;
-    background-color: gold;
-    color: white;
+#countdown {
+  color: white;
+  font-size: 24px;
+  margin-top: 10px;
 }
-
-.container{
-    display: block;
-    border: 1px solid #eceff1;
-    margin: 50px auto;
-    text-align: center;
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-    width: 25vw;
-    background-color: 734F96;
-    align-content:  center;
-}
-
-.card-contents {
-    padding: 5px 5px 10px 5px;
-  }
-
-  .questionStyle{
-    color: white;
-    font-size: 20px;
-    font-weight: 500;
-    margin: 0;
-  }
-
-  #formStyle{
-    color: white;
-    font-size: 15px;
-    font-weight: 500;
-    margin: 0;
-  }
-
-  .card-content{
-    color: white;
-  }
-
-  .highScore {
-    background-color:	734F96;
-    border: 1px solid #eceff1;
-    border-radius: 8px;
-    box-shadow: rgba(60, 64, 67, 2) 0 1px 2px 0,
-      rgba(60, 64, 67, 0.15) 0 2px 4px 3px;
-    margin: 40px 20px;
-    padding: 20px;
-    width: 40vw;
-    justify-content: center;  }
-  
-  #countdown{
-    color: white;
-  }
